@@ -11,7 +11,7 @@ const router = express.Router()
  */
 router.post('/', async (req, res) => {
     try {
-        const { walletAddress, score, timeAliveMs, actionsCompleted, causeOfDeath, message, signature } = req.body
+        const { walletAddress, score, timeAliveMs, actionsCompleted, causeOfDeath, petType, message, signature } = req.body
 
         // Validate required fields
         if (!walletAddress || score === undefined || !timeAliveMs || !actionsCompleted || !causeOfDeath) {
@@ -32,7 +32,8 @@ router.post('/', async (req, res) => {
             score,
             timeAliveMs,
             actionsCompleted,
-            causeOfDeath
+            causeOfDeath,
+            petType: petType || 'pikaclaw'
         })
 
         await petHistory.save()

@@ -60,7 +60,7 @@ const writeStorage = (walletAddress, key, value) => {
     }
 }
 
-export function usePetState(walletAddress = null) {
+export function usePetState(walletAddress = null, petType = null) {
     // Track the previous wallet to detect changes
     const prevWalletRef = useRef(walletAddress)
 
@@ -73,10 +73,13 @@ export function usePetState(walletAddress = null) {
     const [message, setMessage] = useState(null)
     const [, forceUpdate] = useState(0)
 
+    // ... (keep useEffect for wallet changes same, but add petType to saveScore if offline death)
+    // Actually, offline death logic is inside the useEffect. I need to update it too.
+
     // Load state when wallet changes
     useEffect(() => {
         if (walletAddress && walletAddress !== prevWalletRef.current) {
-            // Wallet changed - load new wallet's data
+            // ... (read storage)
             const savedStats = readStorage(walletAddress, 'stats', INITIAL_STATS)
             const savedAlive = readStorage(walletAddress, 'alive', true)
             const savedScore = readStorage(walletAddress, 'score', { actionsCompleted: 0, startTime: Date.now(), deathTime: null, lastUpdate: Date.now() })
@@ -85,11 +88,11 @@ export function usePetState(walletAddress = null) {
 
             // If pet was alive, calculate offline decay
             if (savedAlive && savedScore.lastUpdate) {
+                // ... (decay logic)
                 const timePassed = Date.now() - savedScore.lastUpdate
                 const decayIntervals = Math.floor(timePassed / DECAY_INTERVAL)
 
                 if (decayIntervals > 0) {
-                    // Calculate decayed stats
                     const decayedStats = {
                         hunger: Math.max(0, savedStats.hunger - (DECAY_RATE.hunger * decayIntervals)),
                         happiness: Math.max(0, savedStats.happiness - (DECAY_RATE.happiness * decayIntervals)),
@@ -98,23 +101,16 @@ export function usePetState(walletAddress = null) {
 
                     // Check if pet died while offline
                     if (decayedStats.hunger <= 0 || decayedStats.happiness <= 0 || decayedStats.energy <= 0) {
-                        // Pet died while offline!
                         const causeOfDeath = decayedStats.hunger <= 0 ? 'starvation' :
                             decayedStats.happiness <= 0 ? 'sadness' : 'exhaustion'
 
-                        // Calculate when death occurred (approximate)
+                        // ... calculation ...
                         const statsAtDeath = savedStats
                         let intervalsToZero = Infinity
-
-                        if (savedStats.hunger > 0) {
-                            intervalsToZero = Math.min(intervalsToZero, Math.ceil(savedStats.hunger / DECAY_RATE.hunger))
-                        }
-                        if (savedStats.happiness > 0) {
-                            intervalsToZero = Math.min(intervalsToZero, Math.ceil(savedStats.happiness / DECAY_RATE.happiness))
-                        }
-                        if (savedStats.energy > 0) {
-                            intervalsToZero = Math.min(intervalsToZero, Math.ceil(savedStats.energy / DECAY_RATE.energy))
-                        }
+                        // ... (intervals calc)
+                        if (savedStats.hunger > 0) intervalsToZero = Math.min(intervalsToZero, Math.ceil(savedStats.hunger / DECAY_RATE.hunger))
+                        if (savedStats.happiness > 0) intervalsToZero = Math.min(intervalsToZero, Math.ceil(savedStats.happiness / DECAY_RATE.happiness))
+                        if (savedStats.energy > 0) intervalsToZero = Math.min(intervalsToZero, Math.ceil(savedStats.energy / DECAY_RATE.energy))
 
                         const deathTime = savedScore.lastUpdate + (intervalsToZero * DECAY_INTERVAL)
                         const timeAlive = deathTime - savedScore.startTime
@@ -126,12 +122,13 @@ export function usePetState(walletAddress = null) {
                             score: finalScore,
                             timeAliveMs: timeAlive,
                             actionsCompleted: savedScore.actionsCompleted,
-                            causeOfDeath
+                            causeOfDeath,
+                            petType: petType?.id // Use optional chaining as petType might briefly be null
                         }).then(() => {
                             console.log('Offline death recorded to API')
                         }).catch(console.error)
 
-                        // Update local state
+                        // ... (update local state)
                         setStats(decayedStats)
                         setIsAlive(false)
                         setScore({ ...savedScore, deathTime })
@@ -140,25 +137,26 @@ export function usePetState(walletAddress = null) {
                             timeAlive,
                             actionsCompleted: savedScore.actionsCompleted,
                             date: new Date(deathTime).toISOString(),
-                            causeOfDeath
+                            causeOfDeath,
+                            petType: petType?.id
                         }].sort((a, b) => b.score - a.score).slice(0, 10))
                         setMessage('💀 Your pet died while you were away!')
                     } else {
-                        // Pet survived but stats decayed
+                        // ... survived
                         setStats(decayedStats)
                         setIsAlive(true)
                         setScore({ ...savedScore, lastUpdate: Date.now() })
                         setHighScores(savedHighScores)
                     }
                 } else {
-                    // No significant time passed
+                    // ... no time passed
                     setStats(savedStats)
                     setIsAlive(savedAlive)
                     setScore(savedScore)
                     setHighScores(savedHighScores)
                 }
             } else {
-                // Pet was already dead or no lastUpdate
+                // ... already dead
                 setStats(savedStats)
                 setIsAlive(savedAlive)
                 setScore(savedScore)
@@ -169,7 +167,7 @@ export function usePetState(walletAddress = null) {
             setAction(null)
             setMessage(null)
         } else if (!walletAddress && prevWalletRef.current) {
-            // Wallet disconnected - reset to defaults
+            // ... reset
             setStats(INITIAL_STATS)
             setIsAlive(true)
             setScore({ actionsCompleted: 0, startTime: Date.now(), deathTime: null, lastUpdate: Date.now() })
@@ -178,28 +176,14 @@ export function usePetState(walletAddress = null) {
         }
 
         prevWalletRef.current = walletAddress
-    }, [walletAddress])
+    }, [walletAddress, petType]) // Add petType dependency
 
-    // Save states to localStorage (wallet-specific)
-    useEffect(() => {
-        writeStorage(walletAddress, 'stats', stats)
-    }, [walletAddress, stats])
-
-    useEffect(() => {
-        writeStorage(walletAddress, 'alive', isAlive)
-    }, [walletAddress, isAlive])
-
-    useEffect(() => {
-        writeStorage(walletAddress, 'score', score)
-    }, [walletAddress, score])
-
-    useEffect(() => {
-        writeStorage(walletAddress, 'highscores', highScores)
-    }, [walletAddress, highScores])
-
-    useEffect(() => {
-        writeStorage(walletAddress, 'cooldowns', cooldowns)
-    }, [walletAddress, cooldowns])
+    // ... (localStorage writes)
+    useEffect(() => { writeStorage(walletAddress, 'stats', stats) }, [walletAddress, stats])
+    useEffect(() => { writeStorage(walletAddress, 'alive', isAlive) }, [walletAddress, isAlive])
+    useEffect(() => { writeStorage(walletAddress, 'score', score) }, [walletAddress, score])
+    useEffect(() => { writeStorage(walletAddress, 'highscores', highScores) }, [walletAddress, highScores])
+    useEffect(() => { writeStorage(walletAddress, 'cooldowns', cooldowns) }, [walletAddress, cooldowns])
 
     // Check for death condition
     useEffect(() => {
@@ -221,7 +205,8 @@ export function usePetState(walletAddress = null) {
             timeAlive,
             actionsCompleted: score.actionsCompleted,
             date: new Date().toISOString(),
-            causeOfDeath
+            causeOfDeath,
+            petType: petType?.id
         }
 
         // Freeze the time by saving death time
@@ -245,7 +230,8 @@ export function usePetState(walletAddress = null) {
                     score: finalScore,
                     timeAliveMs: timeAlive,
                     actionsCompleted: score.actionsCompleted,
-                    causeOfDeath
+                    causeOfDeath,
+                    petType: petType?.id
                 })
                 console.log('Score saved to API')
             } catch (error) {
@@ -255,38 +241,31 @@ export function usePetState(walletAddress = null) {
 
         setIsAlive(false)
         setMessage('💀 Game Over!')
-    }, [score, stats, walletAddress])
+    }, [score, stats, walletAddress, petType])
 
-    // Calculate final score: 1 point per second alive + 100 points per action
+    // ... (rest of functions)
     const calculateFinalScore = (timeAlive, actions) => {
         const secondsAlive = Math.floor(timeAlive / 1000)
         return secondsAlive + (actions * 100)
     }
 
-    // Get current score
     const getCurrentScore = useCallback(() => {
         const endTime = score.deathTime || Date.now()
         const timeAlive = endTime - score.startTime
         return calculateFinalScore(timeAlive, score.actionsCompleted)
     }, [score])
 
-    // Get time alive formatted
     const getTimeAlive = useCallback(() => {
         const endTime = score.deathTime || Date.now()
         const timeAlive = endTime - score.startTime
         const seconds = Math.floor(timeAlive / 1000)
         const minutes = Math.floor(seconds / 60)
         const hours = Math.floor(minutes / 60)
-
-        if (hours > 0) {
-            return `${hours}h ${minutes % 60}m`
-        } else if (minutes > 0) {
-            return `${minutes}m ${seconds % 60}s`
-        }
+        if (hours > 0) return `${hours}h ${minutes % 60}m`
+        else if (minutes > 0) return `${minutes}m ${seconds % 60}s`
         return `${seconds}s`
     }, [score.startTime, score.deathTime])
 
-    // Restart game
     const restartGame = useCallback(() => {
         setStats(INITIAL_STATS)
         setScore({ actionsCompleted: 0, startTime: Date.now(), deathTime: null, lastUpdate: Date.now() })
@@ -298,25 +277,20 @@ export function usePetState(walletAddress = null) {
     // Decay stats over time (only if alive)
     useEffect(() => {
         if (!isAlive || !walletAddress) return
-
         const interval = setInterval(() => {
             setStats(prev => ({
                 hunger: Math.max(0, prev.hunger - DECAY_RATE.hunger),
                 happiness: Math.max(0, prev.happiness - DECAY_RATE.happiness),
                 energy: Math.max(0, prev.energy - DECAY_RATE.energy)
             }))
-            // Update lastUpdate timestamp for offline death detection
             setScore(prev => ({ ...prev, lastUpdate: Date.now() }))
         }, DECAY_INTERVAL)
-
         return () => clearInterval(interval)
     }, [isAlive, walletAddress])
 
     // Update display every second
     useEffect(() => {
-        const interval = setInterval(() => {
-            forceUpdate(n => n + 1)
-        }, 1000)
+        const interval = setInterval(() => forceUpdate(n => n + 1), 1000)
         return () => clearInterval(interval)
     }, [])
 
@@ -347,103 +321,44 @@ export function usePetState(walletAddress = null) {
         return remaining > 0 ? Math.ceil(remaining / 1000) : 0
     }, [cooldowns])
 
-    // Format cooldown as mm:ss
+    // ... (rest of helpers)
     const formatCooldown = (seconds) => {
         const mins = Math.floor(seconds / 60)
         const secs = seconds % 60
         return `${mins}:${secs.toString().padStart(2, '0')}`
     }
 
-    // Set cooldown for an action
     const startCooldown = useCallback((actionType) => {
-        setCooldowns(prev => ({
-            ...prev,
-            [actionType]: Date.now() + COOLDOWNS[actionType]
-        }))
+        setCooldowns(prev => ({ ...prev, [actionType]: Date.now() + COOLDOWNS[actionType] }))
     }, [])
 
-    // Increment action counter
     const incrementActions = useCallback(() => {
-        setScore(prev => ({
-            ...prev,
-            actionsCompleted: prev.actionsCompleted + 1
-        }))
+        setScore(prev => ({ ...prev, actionsCompleted: prev.actionsCompleted + 1 }))
     }, [])
 
     const feed = useCallback(() => {
         if (!isAlive || !walletAddress) return
-
-        if (isOnCooldown('feed')) {
-            setMessage(`Wait ${formatCooldown(getCooldownRemaining('feed'))}! 🍔`)
-            return
-        }
-
-        if (stats.hunger > 95) {
-            setMessage("I'm full! 🫃")
-            return
-        }
-
-        setStats(prev => ({
-            ...prev,
-            hunger: Math.min(100, prev.hunger + ACTION_EFFECTS.feed.hunger)
-        }))
-        setAction('eating')
-        setMessage('Yummy! 🍔')
-        startCooldown('feed')
-        incrementActions()
+        if (isOnCooldown('feed')) { setMessage(`Wait ${formatCooldown(getCooldownRemaining('feed'))}! 🍔`); return }
+        if (stats.hunger > 95) { setMessage("I'm full! 🫃"); return }
+        setStats(prev => ({ ...prev, hunger: Math.min(100, prev.hunger + ACTION_EFFECTS.feed.hunger) }))
+        setAction('eating'); setMessage('Yummy! 🍔'); startCooldown('feed'); incrementActions()
     }, [isAlive, walletAddress, stats.hunger, isOnCooldown, getCooldownRemaining, startCooldown, incrementActions])
 
     const play = useCallback(() => {
         if (!isAlive || !walletAddress) return
-
-        if (isOnCooldown('play')) {
-            setMessage(`Wait ${formatCooldown(getCooldownRemaining('play'))}! 🎮`)
-            return
-        }
-
-        if (stats.energy < 15) {
-            setMessage('Too tired... 😴')
-            return
-        }
-
-        if (stats.happiness > 95) {
-            setMessage("So happy! 💖")
-            return
-        }
-
-        setStats(prev => ({
-            ...prev,
-            happiness: Math.min(100, prev.happiness + ACTION_EFFECTS.play.happiness),
-            energy: Math.max(0, prev.energy + ACTION_EFFECTS.play.energy)
-        }))
-        setAction('playing')
-        setMessage('Wheee! ✨')
-        startCooldown('play')
-        incrementActions()
+        if (isOnCooldown('play')) { setMessage(`Wait ${formatCooldown(getCooldownRemaining('play'))}! 🎮`); return }
+        if (stats.energy < 15) { setMessage('Too tired... 😴'); return }
+        if (stats.happiness > 95) { setMessage("So happy! 💖"); return }
+        setStats(prev => ({ ...prev, happiness: Math.min(100, prev.happiness + ACTION_EFFECTS.play.happiness), energy: Math.max(0, prev.energy + ACTION_EFFECTS.play.energy) }))
+        setAction('playing'); setMessage('Wheee! ✨'); startCooldown('play'); incrementActions()
     }, [isAlive, walletAddress, stats.energy, stats.happiness, isOnCooldown, getCooldownRemaining, startCooldown, incrementActions])
 
     const sleep = useCallback(() => {
         if (!isAlive || !walletAddress) return
-
-        if (isOnCooldown('sleep')) {
-            setMessage(`Wait ${formatCooldown(getCooldownRemaining('sleep'))}! 💤`)
-            return
-        }
-
-        if (stats.energy > 95) {
-            setMessage("Not sleepy! 😊")
-            return
-        }
-
-        setStats(prev => ({
-            ...prev,
-            energy: Math.min(100, prev.energy + ACTION_EFFECTS.sleep.energy),
-            happiness: Math.min(100, prev.happiness + ACTION_EFFECTS.sleep.happiness)
-        }))
-        setAction('sleeping')
-        setMessage('Zzz... 💤')
-        startCooldown('sleep')
-        incrementActions()
+        if (isOnCooldown('sleep')) { setMessage(`Wait ${formatCooldown(getCooldownRemaining('sleep'))}! 💤`); return }
+        if (stats.energy > 95) { setMessage("Not sleepy! 😊"); return }
+        setStats(prev => ({ ...prev, energy: Math.min(100, prev.energy + ACTION_EFFECTS.sleep.energy), happiness: Math.min(100, prev.happiness + ACTION_EFFECTS.sleep.happiness) }))
+        setAction('sleeping'); setMessage('Zzz... 💤'); startCooldown('sleep'); incrementActions()
     }, [isAlive, walletAddress, stats.energy, isOnCooldown, getCooldownRemaining, startCooldown, incrementActions])
 
     const getMood = useCallback(() => {
@@ -455,25 +370,9 @@ export function usePetState(walletAddress = null) {
     }, [stats, isAlive])
 
     return {
-        stats,
-        action,
-        message,
-        mood: getMood(),
-        isAlive,
-        score: {
-            current: getCurrentScore(),
-            actionsCompleted: score.actionsCompleted,
-            timeAlive: getTimeAlive()
-        },
-        highScores,
-        cooldowns: {
-            feed: getCooldownRemaining('feed'),
-            play: getCooldownRemaining('play'),
-            sleep: getCooldownRemaining('sleep')
-        },
-        feed,
-        play,
-        sleep,
-        restartGame
+        stats, action, message, mood: getMood(), isAlive,
+        score: { current: getCurrentScore(), actionsCompleted: score.actionsCompleted, timeAlive: getTimeAlive() },
+        highScores, cooldowns: { feed: getCooldownRemaining('feed'), play: getCooldownRemaining('play'), sleep: getCooldownRemaining('sleep') },
+        feed, play, sleep, restartGame
     }
 }

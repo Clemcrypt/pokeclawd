@@ -3,7 +3,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 /**
  * Save a pet run score to the API
  */
-export async function saveScore({ walletAddress, score, timeAliveMs, actionsCompleted, causeOfDeath }) {
+export async function saveScore({ walletAddress, score, timeAliveMs, actionsCompleted, causeOfDeath, petType }) {
     try {
         const response = await fetch(`${API_URL}/api/scores`, {
             method: 'POST',
@@ -13,7 +13,8 @@ export async function saveScore({ walletAddress, score, timeAliveMs, actionsComp
                 score,
                 timeAliveMs,
                 actionsCompleted,
-                causeOfDeath
+                causeOfDeath,
+                petType
             })
         })
 

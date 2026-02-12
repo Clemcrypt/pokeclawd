@@ -23,6 +23,11 @@ const petHistorySchema = new mongoose.Schema({
         enum: ['starvation', 'sadness', 'exhaustion'],
         required: true
     },
+    petType: {
+        type: String,
+        required: false, // Optional for legacy records
+        default: 'pikaclaw'
+    },
     createdAt: {
         type: Date,
         default: Date.now

@@ -156,7 +156,7 @@ function App() {
     stats, action, message, mood, cooldowns,
     isAlive, score, highScores,
     feed, play, sleep, restartGame
-  } = usePetState(walletAddress)
+  } = usePetState(walletAddress, selectedPetType)
 
   // Load selected pet type from localStorage
   useEffect(() => {
