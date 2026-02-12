@@ -29,7 +29,7 @@ export function Pet({ action, message, mood, isAlive = true }) {
 
             <img
                 src={currentImage}
-                alt="Pokeclaude"
+                alt="PokeClawd"
                 className={`pet-sprite action-sprite ${animationClass} ${!isAlive ? 'dead' : ''}`}
             />
         </div>

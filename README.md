@@ -1,23 +1,23 @@
-# ⚡ Pokeclaude
+# ⚡ PokeClawd
 
-**Gotta raise 'em all!** A Pokemon-inspired virtual pet game with Solana wallet integration.
+**Open Claw Powered Pets** — A virtual pet game with Solana wallet integration.
 
-![Pokeclaude Screenshot](screenshot.png)
+![PokeClawd Screenshot](screenshot.png)
 
 ## ✨ Features
 
 | Feature | Description |
 |---------|-------------|
-| ⚡ **Pokeclaude Pet** | Cute Claude×Pokemon hybrid with custom sprites |
+| ⚡ **PokeClawd Pet** | Cute claw-powered creature with custom sprites |
 | 🎬 **Action Sprites** | Unique art for feeding, playing & sleeping |
 | 📊 **Pet Stats** | Hunger, Happiness, Energy — decay in real-time |
 | ⏱️ **5-Min Cooldowns** | Strategic action timing |
-| 💀 **Death System** | When any stat hits 0, your Pokeclaude faints |
+| 💀 **Death System** | When any stat hits 0, your PokeClawd faints |
 | 📴 **Offline Death** | Stats keep decaying while you're away |
 | 🏆 **Scoring** | 1 pt/sec alive + 100 pts/action |
 | 👛 **Wallet-Only** | Must connect Phantom/Solflare to play |
 | 🗃️ **MongoDB Storage** | Scores & history saved per wallet |
-| 📜 **Pet History** | View all your past Pokeclaudes |
+| 📜 **Pet History** | View all your past PokClawds |
 | 📋 **Leaderboard** | Global high scores |
 
 ## 🚀 Quick Start
@@ -39,13 +39,13 @@ npm run server   # API on :3001
 ## 🎮 How to Play
 
 1. **Connect Wallet** — Required to play
-2. **Catch Your Pokeclaude** — First-time users see welcome screen
-3. **Care for Your Pokeclaude**:
+2. **Catch Your PokeClawd** — First-time users see welcome screen
+3. **Care for Your PokeClawd**:
    - 🍔 **Feed** → +25 Hunger
    - 🎮 **Play** → +20 Happiness, -15 Energy  
    - 💤 **Sleep** → +30 Energy
-4. **Don't Let Stats Hit Zero** — Or your Pokeclaude faints!
-5. **Check Your History** — See all past Pokeclaudes on claim screen
+4. **Don't Let Stats Hit Zero** — Or your PokeClawd faints!
+5. **Check Your History** — See all past PokeClawds on claim screen
 
 ## 🏗️ Tech Stack
 
@@ -65,7 +65,7 @@ npm run server   # API on :3001
 │   ├── api/client.js        # API calls
 │   ├── components/          # Pet, Stats, GameOver, etc.
 │   ├── hooks/usePetState.js # Game logic + offline death
-│   └── assets/              # Pokeclaude sprites
+│   └── assets/              # PokeClawd sprites
 ├── server/
 │   ├── models/PetHistory.js
 │   ├── routes/scores.js
@@ -97,4 +97,4 @@ MIT
 
 ---
 
-Built with ❤️ — Gotta raise 'em all! ⚡
+⚡ Open Claw Powered Pets
