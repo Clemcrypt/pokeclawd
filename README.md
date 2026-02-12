@@ -38,13 +38,26 @@ npm run server   # API on :3001
 
 ## 🎮 How to Play
 
-1. **Connect Wallet** — Required to play
-2. **Catch Your PokeClawd** — First-time users see welcome screen
-3. **Care for Your PokeClawd**:
+### 1. New: Choose Your Pet! 🐾
+When you first connect, you can now choose your PokeClawd!
+- **Pikaclaw** (⚡ Electric): Fluffy and energetic
+- **Krabbyclaw** (🌊 Water): Feisty and protective
+
+![Pet Selection](screenshot-selection.png)
+*(Please add your screenshot as `screenshot-selection.png`)*
+
+### 2. Connect Your Wallet
+Click the "Select Wallet" button to start. This retrieves your pet's history.
+
+### 3. Care for Your PokeClawd:
    - 🍔 **Feed** → +25 Hunger
    - 🎮 **Play** → +20 Happiness, -15 Energy  
    - 💤 **Sleep** → +30 Energy
-4. **Don't Let Stats Hit Zero** — Or your PokeClawd faints!
+
+![Gameplay Screenshot](screenshot2.png)
+*(Please add your screenshot as `screenshot2.png`)*
+
+### 4. Don't Let Stats Hit Zero — Or your PokeClawd faints!
 5. **Check Your History** — See all past PokeClawds on claim screen
 
 ## 🏗️ Tech Stack
