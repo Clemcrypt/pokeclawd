@@ -1,22 +1,23 @@
-# 🎮 Tamaclaude
+# ⚡ Pokeclaude
 
-A Tamagotchi-style virtual pet game with Solana wallet integration and persistent scores on MongoDB.
+**Gotta raise 'em all!** A Pokemon-inspired virtual pet game with Solana wallet integration.
 
-![Tamaclaude Screenshot](screenshot.png)
+![Pokeclaude Screenshot](screenshot.png)
 
 ## ✨ Features
 
 | Feature | Description |
 |---------|-------------|
-| 🐾 **Animated Pet** | Cute pixel blob with custom sprites for feeding, playing & sleeping |
+| ⚡ **Pokeclaude Pet** | Cute Claude×Pokemon hybrid with custom sprites |
+| 🎬 **Action Sprites** | Unique art for feeding, playing & sleeping |
 | 📊 **Pet Stats** | Hunger, Happiness, Energy — decay in real-time |
-| ⏱️ **5-Min Cooldowns** | Strategic action timing like classic Tamagotchi |
-| 💀 **Death System** | When any stat hits 0, your pet dies |
-| 📴 **Offline Death** | Pet continues decaying while you're away |
+| ⏱️ **5-Min Cooldowns** | Strategic action timing |
+| 💀 **Death System** | When any stat hits 0, your Pokeclaude faints |
+| 📴 **Offline Death** | Stats keep decaying while you're away |
 | 🏆 **Scoring** | 1 pt/sec alive + 100 pts/action |
 | 👛 **Wallet-Only** | Must connect Phantom/Solflare to play |
 | 🗃️ **MongoDB Storage** | Scores & history saved per wallet |
-| 📜 **Pet History** | View all your past pets with cause of death |
+| 📜 **Pet History** | View all your past Pokeclaudes |
 | 📋 **Leaderboard** | Global high scores |
 
 ## 🚀 Quick Start
@@ -38,13 +39,13 @@ npm run server   # API on :3001
 ## 🎮 How to Play
 
 1. **Connect Wallet** — Required to play
-2. **Claim Your Pet** — First-time users see welcome screen
-3. **Care for Your Pet**:
+2. **Catch Your Pokeclaude** — First-time users see welcome screen
+3. **Care for Your Pokeclaude**:
    - 🍔 **Feed** → +25 Hunger
    - 🎮 **Play** → +20 Happiness, -15 Energy  
    - 💤 **Sleep** → +30 Energy
-4. **Don't Let Stats Hit Zero** — Or your pet dies!
-5. **Check Your History** — See all past pets on claim screen
+4. **Don't Let Stats Hit Zero** — Or your Pokeclaude faints!
+5. **Check Your History** — See all past Pokeclaudes on claim screen
 
 ## 🏗️ Tech Stack
 
@@ -61,15 +62,15 @@ npm run server   # API on :3001
 
 ```
 ├── src/
-│   ├── api/client.js       # API calls
-│   ├── components/         # Pet, Stats, GameOver, etc.
+│   ├── api/client.js        # API calls
+│   ├── components/          # Pet, Stats, GameOver, etc.
 │   ├── hooks/usePetState.js # Game logic + offline death
-│   └── assets/             # Sprites
+│   └── assets/              # Pokeclaude sprites
 ├── server/
 │   ├── models/PetHistory.js
 │   ├── routes/scores.js
 │   └── index.js
-├── render.yaml             # Render deployment
+├── render.yaml              # Render deployment
 └── .env.example
 ```
 
@@ -96,4 +97,4 @@ MIT
 
 ---
 
-Built with ❤️ using React, Solana & MongoDB
+Built with ❤️ — Gotta raise 'em all! ⚡

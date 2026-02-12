@@ -8,7 +8,7 @@ import { ScoreDisplay } from './components/ScoreDisplay'
 import { GameOver } from './components/GameOver'
 import { usePetState } from './hooks/usePetState'
 import { getWalletHistory } from './api/client'
-import petSprites from './assets/pet-sprites.png'
+import pokeIdle from './assets/pokeclaude-idle.png'
 
 function Particles() {
   return (
@@ -45,7 +45,7 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
   return (
     <div className="claim-screen">
       <div className="claim-card glass-card">
-        <h2>🐣 Welcome to Tamaclaude!</h2>
+        <h2>🐣 Welcome to Pokeclaude!</h2>
 
         {walletStats && walletStats.totalPets > 0 ? (
           <div className="returning-user">
@@ -59,7 +59,7 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
         )}
 
         <div className="claim-pet-preview">
-          <img src={petSprites} alt="Your future pet" className="claim-pet-image" />
+          <img src={pokeIdle} alt="Your future Pokeclaude" className="claim-pet-image" />
         </div>
 
         <button className="claim-btn" onClick={onClaim}>
@@ -93,19 +93,19 @@ function ConnectWalletScreen() {
   return (
     <div className="connect-screen">
       <div className="connect-card glass-card">
-        <h1 className="connect-title">🎮 Tamaclaude</h1>
-        <p className="connect-subtitle">Your Solana-powered virtual pet</p>
+        <h1 className="connect-title">⚡ Pokeclaude</h1>
+        <p className="connect-subtitle">Gotta raise 'em all!</p>
 
         <div className="connect-pet-preview">
-          <img src={petSprites} alt="Tamaclaude pet" className="connect-pet-image" />
+          <img src={pokeIdle} alt="Pokeclaude" className="connect-pet-image" />
         </div>
 
-        <p className="connect-info">Connect your Solana wallet to start playing!</p>
+        <p className="connect-info">Connect your Solana wallet to catch your first Pokeclaude!</p>
 
         <WalletButton />
 
         <div className="connect-features">
-          <div className="feature">🐾 Raise a virtual pet</div>
+          <div className="feature">⚡ Raise your own Pokeclaude</div>
           <div className="feature">🏆 Compete on leaderboards</div>
           <div className="feature">💾 Progress saved to your wallet</div>
         </div>
@@ -206,8 +206,8 @@ function App() {
       <Particles />
       <div className="app-container">
         <header className="header">
-          <h1>Tamaclaude</h1>
-          <p>Your Solana-powered virtual pet</p>
+          <h1>Pokeclaude</h1>
+          <p>Gotta raise 'em all!</p>
         </header>
 
         <div className="game-container">
