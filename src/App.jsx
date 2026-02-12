@@ -9,6 +9,7 @@ import { GameOver } from './components/GameOver'
 import { usePetState } from './hooks/usePetState'
 import { getWalletHistory } from './api/client'
 import { PET_TYPES, PET_LIST } from './data/petTypes'
+import { BattlePreview } from './components/BattlePreview'
 
 function Particles() {
   return (
@@ -151,6 +152,7 @@ function App() {
   const [petHistory, setPetHistory] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedPetType, setSelectedPetType] = useState(null)
+  const [showBattlePreview, setShowBattlePreview] = useState(false)
 
   const {
     stats, action, message, mood, cooldowns,
@@ -220,7 +222,7 @@ function App() {
   }
 
   const handleBattle = () => {
-    setCustomMessage("PvP Battle Arena coming soon! ⚔️")
+    setShowBattlePreview(true)
   }
 
   // Not connected - show connect screen
@@ -287,6 +289,12 @@ function App() {
 
         <WalletButton />
       </div>
+
+      <BattlePreview
+        isOpen={showBattlePreview}
+        onClose={() => setShowBattlePreview(false)}
+        userPetType={selectedPetType}
+      />
 
       {!isAlive && (
         <GameOver

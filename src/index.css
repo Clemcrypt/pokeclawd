@@ -1166,3 +1166,162 @@ body::before {
   color: var(--text-muted);
   font-size: 0.75rem;
 }
+
+/* Battle Arena Modal */
+.battle-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+.battle-modal {
+  width: 90%;
+  max-width: 600px;
+  padding: 32px;
+  text-align: center;
+  position: relative;
+  border: 2px solid var(--accent-danger);
+  box-shadow: 0 0 50px rgba(255, 0, 0, 0.2);
+  background: linear-gradient(135deg, rgba(20, 0, 0, 0.95), rgba(40, 10, 10, 0.95));
+  border-radius: var(--border-radius-lg);
+}
+
+.battle-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.5rem;
+  color: var(--accent-danger);
+  margin-bottom: 32px;
+  text-shadow: 0 0 10px var(--accent-danger);
+  letter-spacing: 2px;
+  line-height: 1.4;
+}
+
+.arena-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+  padding: 0 20px;
+}
+
+.fighter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.fighter-tag {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.fighter-sprite {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+}
+
+.fighter-sprite img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  animation: bounce 1s infinite;
+}
+
+.fighter.enemy .fighter-sprite {
+  filter: brightness(0) invert(1) opacity(0.5);
+}
+
+.fighter-platform {
+  width: 80px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.vs-badge {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.5rem;
+  color: #ff0055;
+  background: black;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 2px solid #ff0055;
+  box-shadow: 0 0 20px #ff0055;
+  z-index: 10;
+  margin: 0 10px;
+}
+
+.coming-soon-banner {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 24px;
+}
+
+.coming-soon-banner h3 {
+  color: var(--accent-warning);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  animation: pulse 2s infinite;
+  line-height: 1.6;
+}
+
+.subtext {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.close-btn:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
