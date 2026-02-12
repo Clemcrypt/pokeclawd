@@ -128,7 +128,7 @@ function ConnectWalletScreen() {
           ))}
         </div>
 
-        <p className="connect-info">Connect your Solana wallet to catch your first PokeClawd!</p>
+        <p className="connect-info">Connect your wallet to choose your companion!</p>
 
         <WalletButton />
 
@@ -179,7 +179,17 @@ function App() {
           setPetHistory(data.history || [])
           const storageKey = `tamaclaude-${walletAddress.slice(0, 8)}-alive`
           const petIsAlive = localStorage.getItem(storageKey) !== 'false' && localStorage.getItem(storageKey) !== null
-          setHasClaimed(petIsAlive && localStorage.getItem(storageKey) === 'true')
+          const isClaimed = petIsAlive && localStorage.getItem(storageKey) === 'true'
+          setHasClaimed(isClaimed)
+
+          // Legacy migration: If claimed but no pet type, default to Pikaclaw
+          if (isClaimed) {
+            const typeKey = `tamaclaude-${walletAddress.slice(0, 8)}-petType`
+            if (!localStorage.getItem(typeKey)) {
+              localStorage.setItem(typeKey, 'pikaclaw')
+              setSelectedPetType(PET_TYPES.pikaclaw)
+            }
+          }
         })
         .catch(console.error)
         .finally(() => setLoading(false))
