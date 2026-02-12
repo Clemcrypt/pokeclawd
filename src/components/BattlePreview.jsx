@@ -1,7 +1,9 @@
 import { createPortal } from 'react-dom'
 
-export function BattlePreview({ isOpen, onClose, userPetType }) {
+export function BattlePreview({ isOpen, onClose, userPetType, userLevel = 1 }) {
     if (!isOpen) return null
+
+    const isLocked = userLevel < 10
 
     // Use portal to render overlay at root level
     return createPortal(
@@ -34,9 +36,21 @@ export function BattlePreview({ isOpen, onClose, userPetType }) {
                 </div>
 
                 <div className="coming-soon-banner">
-                    <h3>🚧 UNDER CONSTRUCTION 🚧</h3>
-                    <p>The Open Claw Arena is being built.</p>
-                    <p className="subtext">Prepare your pets for glory!</p>
+                    {isLocked ? (
+                        <>
+                            <h3>🔒 LOCKED: REQUIRES LEVEL 10</h3>
+                            <div style={{ color: '#fff', fontSize: '0.9rem', marginBottom: '8px' }}>
+                                Your pet is Level <span style={{ color: '#ffd700' }}>{userLevel}</span>
+                            </div>
+                            <p className="subtext">Train harder to enter the arena!</p>
+                        </>
+                    ) : (
+                        <>
+                            <h3>🚧 UNDER CONSTRUCTION 🚧</h3>
+                            <p>The Open Claw Arena is being built.</p>
+                            <p className="subtext">Prepare your pets for glory!</p>
+                        </>
+                    )}
                 </div>
             </div>
         </div>,

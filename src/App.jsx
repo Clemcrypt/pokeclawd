@@ -158,7 +158,8 @@ function App() {
     stats, action, message, mood, cooldowns,
     isAlive, score, highScores,
     feed, play, sleep, restartGame,
-    setCustomMessage
+    setCustomMessage,
+    level, xpProgress
   } = usePetState(walletAddress, selectedPetType)
 
   // Load selected pet type from localStorage
@@ -276,7 +277,7 @@ function App() {
         <div className="game-container">
           <ScoreDisplay score={score} />
           <Pet action={action} message={message} mood={mood} isAlive={isAlive} petType={selectedPetType} />
-          <PetStats stats={stats} />
+          <PetStats stats={stats} level={level} xpProgress={xpProgress} />
           <ActionButtons
             onFeed={feed}
             onPlay={play}
@@ -294,6 +295,7 @@ function App() {
         isOpen={showBattlePreview}
         onClose={() => setShowBattlePreview(false)}
         userPetType={selectedPetType}
+        userLevel={level}
       />
 
       {!isAlive && (

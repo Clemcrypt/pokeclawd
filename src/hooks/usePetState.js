@@ -4,30 +4,86 @@ import { saveScore } from '../api/client'
 const INITIAL_STATS = {
     hunger: 80,
     happiness: 70,
-    energy: 90
+    energy: 90,
+    xp: 0
 }
 
-// Decay rates - stats drop over time
-const DECAY_RATE = {
-    hunger: 0.5,
-    happiness: 0.3,
-    energy: 0.2
-}
-
-const DECAY_INTERVAL = 3000 // 3 seconds
-
-// All cooldowns are 5 minutes (300 seconds)
-const COOLDOWNS = {
-    feed: 300000,
-    play: 300000,
-    sleep: 300000
-}
+// ...
 
 // Action effects
 const ACTION_EFFECTS = {
-    feed: { hunger: 25 },
-    play: { happiness: 20, energy: -15 },
-    sleep: { energy: 30, happiness: 5 }
+    feed: { hunger: 25, xp: 10 },
+    play: { happiness: 20, energy: -15, xp: 15 },
+    sleep: { energy: 30, happiness: 5, xp: 20 }
+}
+
+// ...
+
+export function usePetState(walletAddress = null, petType = null) {
+    // ...
+
+    // Calculate level based on XP (100 XP per level)
+    const getLevel = useCallback(() => {
+        return Math.floor(stats.xp / 100) + 1
+    }, [stats.xp])
+
+    const getXpProgress = useCallback(() => {
+        return stats.xp % 100
+    }, [stats.xp])
+
+    // ...
+
+    const feed = useCallback(() => {
+        if (!isAlive || !walletAddress) return
+        if (isOnCooldown('feed')) { setMessage(`Wait ${formatCooldown(getCooldownRemaining('feed'))}! 🍔`); return }
+        if (stats.hunger > 95) { setMessage("I'm full! 🫃"); return }
+
+        setStats(prev => ({
+            ...prev,
+            hunger: Math.min(100, prev.hunger + ACTION_EFFECTS.feed.hunger),
+            xp: (prev.xp || 0) + ACTION_EFFECTS.feed.xp
+        }))
+        setAction('eating'); setMessage(`Yummy! +${ACTION_EFFECTS.feed.xp} XP`); startCooldown('feed'); incrementActions()
+    }, [isAlive, walletAddress, stats.hunger, isOnCooldown, getCooldownRemaining, startCooldown, incrementActions])
+
+    const play = useCallback(() => {
+        if (!isAlive || !walletAddress) return
+        if (isOnCooldown('play')) { setMessage(`Wait ${formatCooldown(getCooldownRemaining('play'))}! 🎮`); return }
+        if (stats.energy < 15) { setMessage('Too tired... 😴'); return }
+        if (stats.happiness > 95) { setMessage("So happy! 💖"); return }
+
+        setStats(prev => ({
+            ...prev,
+            happiness: Math.min(100, prev.happiness + ACTION_EFFECTS.play.happiness),
+            energy: Math.max(0, prev.energy + ACTION_EFFECTS.play.energy),
+            xp: (prev.xp || 0) + ACTION_EFFECTS.play.xp
+        }))
+        setAction('playing'); setMessage(`Wheee! +${ACTION_EFFECTS.play.xp} XP`); startCooldown('play'); incrementActions()
+    }, [isAlive, walletAddress, stats.energy, stats.happiness, isOnCooldown, getCooldownRemaining, startCooldown, incrementActions])
+
+    const sleep = useCallback(() => {
+        if (!isAlive || !walletAddress) return
+        if (isOnCooldown('sleep')) { setMessage(`Wait ${formatCooldown(getCooldownRemaining('sleep'))}! 💤`); return }
+        if (stats.energy > 95) { setMessage("Not sleepy! 😊"); return }
+
+        setStats(prev => ({
+            ...prev,
+            energy: Math.min(100, prev.energy + ACTION_EFFECTS.sleep.energy),
+            happiness: Math.min(100, prev.happiness + ACTION_EFFECTS.sleep.happiness),
+            xp: (prev.xp || 0) + ACTION_EFFECTS.sleep.xp
+        }))
+        setAction('sleeping'); setMessage(`Zzz... +${ACTION_EFFECTS.sleep.xp} XP`); startCooldown('sleep'); incrementActions()
+    }, [isAlive, walletAddress, stats.energy, isOnCooldown, getCooldownRemaining, startCooldown, incrementActions])
+
+    // ...
+
+    return {
+        stats, action, message, mood: getMood(), isAlive,
+        level: getLevel(),
+        xpProgress: getXpProgress(),
+        setCustomMessage: setMessage,
+        // ...
+    }
 }
 
 // Helper to get wallet-specific localStorage key
