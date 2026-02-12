@@ -8,7 +8,7 @@ import { ScoreDisplay } from './components/ScoreDisplay'
 import { GameOver } from './components/GameOver'
 import { usePetState } from './hooks/usePetState'
 import { getWalletHistory } from './api/client'
-import pokeIdle from './assets/pokeclaude-idle.png'
+import { PET_TYPES, PET_LIST } from './data/petTypes'
 
 function Particles() {
   return (
@@ -29,6 +29,8 @@ function Particles() {
 }
 
 function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
+  const [selectedPet, setSelectedPet] = useState(PET_LIST[0].id)
+
   const formatTime = (ms) => {
     const seconds = Math.floor(ms / 1000)
     const minutes = Math.floor(seconds / 60)
@@ -42,6 +44,8 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
     exhaustion: '😴'
   }
 
+  const currentPet = PET_TYPES[selectedPet]
+
   return (
     <div className="claim-screen">
       <div className="claim-card glass-card">
@@ -54,16 +58,32 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
           </div>
         ) : (
           <div className="new-user">
-            <p>Your wallet is connected! Ready to adopt your first pet?</p>
+            <p>Your wallet is connected! Choose your PokeClawd:</p>
           </div>
         )}
 
-        <div className="claim-pet-preview">
-          <img src={pokeIdle} alt="Your future PokeClawd" className="claim-pet-image" />
+        <div className="pet-selector">
+          <h3>⚡ Choose Your PokeClawd</h3>
+          <div className="pet-options">
+            {PET_LIST.map(pet => (
+              <div
+                key={pet.id}
+                className={`pet-option ${selectedPet === pet.id ? 'selected' : ''}`}
+                onClick={() => setSelectedPet(pet.id)}
+              >
+                <img src={pet.sprites.idle} alt={pet.name} className="pet-option-img" />
+                <div className="pet-option-info">
+                  <span className="pet-option-name">{pet.name}</span>
+                  <span className="pet-option-type">{pet.type}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="pet-description">{currentPet.description}</p>
         </div>
 
-        <button className="claim-btn" onClick={onClaim}>
-          {walletStats && walletStats.totalPets > 0 ? '🎮 Start New Pet' : '🐣 Claim Your Pet'}
+        <button className="claim-btn" onClick={() => onClaim(selectedPet)}>
+          {walletStats && walletStats.totalPets > 0 ? '🎮 Start New Pet' : '🐣 Catch This PokeClawd!'}
         </button>
 
         {petHistory && petHistory.length > 0 && (
@@ -82,7 +102,7 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
         )}
 
         <p className="claim-info">
-          Keep your pet alive by feeding, playing, and letting it rest!
+          Keep your PokeClawd alive by feeding, playing, and letting it rest!
         </p>
       </div>
     </div>
@@ -90,6 +110,9 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
 }
 
 function ConnectWalletScreen() {
+  // Show Pikaclaw as the default preview
+  const previewPet = PET_LIST[0]
+
   return (
     <div className="connect-screen">
       <div className="connect-card glass-card">
@@ -97,7 +120,7 @@ function ConnectWalletScreen() {
         <p className="connect-subtitle">Open Claw Powered Pets</p>
 
         <div className="connect-pet-preview">
-          <img src={pokeIdle} alt="PokeClawd" className="connect-pet-image" />
+          <img src={previewPet.sprites.idle} alt="PokeClawd" className="connect-pet-image" />
         </div>
 
         <p className="connect-info">Connect your Solana wallet to catch your first PokeClawd!</p>
@@ -122,12 +145,24 @@ function App() {
   const [walletStats, setWalletStats] = useState(null)
   const [petHistory, setPetHistory] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedPetType, setSelectedPetType] = useState(null)
 
   const {
     stats, action, message, mood, cooldowns,
     isAlive, score, highScores,
     feed, play, sleep, restartGame
   } = usePetState(walletAddress)
+
+  // Load selected pet type from localStorage
+  useEffect(() => {
+    if (walletAddress) {
+      const storageKey = `tamaclaude-${walletAddress.slice(0, 8)}-petType`
+      const saved = localStorage.getItem(storageKey)
+      if (saved && PET_TYPES[saved]) {
+        setSelectedPetType(PET_TYPES[saved])
+      }
+    }
+  }, [walletAddress])
 
   // Check if user has existing pet history when wallet connects
   useEffect(() => {
@@ -137,10 +172,8 @@ function App() {
         .then(data => {
           setWalletStats(data.stats)
           setPetHistory(data.history || [])
-          // Check wallet-specific localStorage for alive pet
           const storageKey = `tamaclaude-${walletAddress.slice(0, 8)}-alive`
           const petIsAlive = localStorage.getItem(storageKey) !== 'false' && localStorage.getItem(storageKey) !== null
-          // Auto-claim if they have a living pet in localStorage
           setHasClaimed(petIsAlive && localStorage.getItem(storageKey) === 'true')
         })
         .catch(console.error)
@@ -149,11 +182,19 @@ function App() {
       setHasClaimed(false)
       setWalletStats(null)
       setPetHistory([])
+      setSelectedPetType(null)
       setLoading(false)
     }
   }, [connected, walletAddress])
 
-  const handleClaim = () => {
+  const handleClaim = (petTypeId) => {
+    const petType = PET_TYPES[petTypeId]
+    setSelectedPetType(petType)
+    // Save selection to localStorage
+    if (walletAddress) {
+      const storageKey = `tamaclaude-${walletAddress.slice(0, 8)}-petType`
+      localStorage.setItem(storageKey, petTypeId)
+    }
     restartGame()
     setHasClaimed(true)
   }
@@ -212,7 +253,7 @@ function App() {
 
         <div className="game-container">
           <ScoreDisplay score={score} />
-          <Pet action={action} message={message} mood={mood} isAlive={isAlive} />
+          <Pet action={action} message={message} mood={mood} isAlive={isAlive} petType={selectedPetType} />
           <PetStats stats={stats} />
           <ActionButtons
             onFeed={feed}

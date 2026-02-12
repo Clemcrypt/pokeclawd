@@ -972,6 +972,82 @@ body::before {
   margin-top: 16px;
 }
 
+/* Pet Selector */
+.pet-selector {
+  margin: 20px 0;
+}
+
+.pet-selector h3 {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.pet-options {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pet-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border-radius: var(--border-radius-md);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.pet-option:hover {
+  border-color: rgba(255, 107, 53, 0.4);
+  background: rgba(255, 107, 53, 0.05);
+  transform: translateY(-2px);
+}
+
+.pet-option.selected {
+  border-color: var(--accent-primary);
+  background: rgba(255, 107, 53, 0.1);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.2);
+}
+
+.pet-option-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  margin-bottom: 8px;
+}
+
+.pet-option-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.pet-option-name {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.pet-option-type {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.pet-description {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
 /* Loading Screen */
 .loading-screen {
   padding: 40px;
