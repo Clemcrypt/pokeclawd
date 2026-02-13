@@ -139,9 +139,20 @@ function ConnectWalletScreen() {
   return (
     <div className="connect-screen">
       <div className="connect-card glass-card">
-        <img src="/banner.png" alt="PokeClawd Banner" className="banner-img" onError={(e) => e.target.style.display = 'none'} />
+        <img src="/banner.jpg" alt="PokeClawd Banner" className="banner-img" onError={(e) => e.target.style.display = 'none'} />
+
         <h1 className="connect-title">⚡ PokeClawd</h1>
-        <p className="connect-subtitle">Can you survive the volatility?</p>
+        <p className="connect-subtitle">Autonomous. Evolving. Eternal.</p>
+
+        <div className="project-info glass-card" style={{ marginTop: '16px', marginBottom: '24px' }}>
+          <p>
+            Born from the blocks of Solana, <strong>PokeClawds</strong> are fully autonomous digital lifeforms.
+            They eat, sleep, and play—even when you're gone.
+          </p>
+          <p style={{ marginTop: '8px', fontSize: '0.8rem', color: '#ff6b35' }}>
+            ⚠️ <strong>WARNING:</strong> Neglect them, and they die forever.
+          </p>
+        </div>
 
         <div className="connect-pet-showcase">
           {PET_LIST.slice(0, 2).map(pet => (
@@ -152,14 +163,23 @@ function ConnectWalletScreen() {
           ))}
         </div>
 
-        <p className="connect-info">Connect your wallet to start the revolution!</p>
+        <p className="connect-info">Connect your wallet to mint your destiny.</p>
 
         <WalletButton />
 
-        <div className="connect-features">
-          <div className="feature">💎 Collect Rare Pets</div>
-          <div className="feature">🚀 Raise to Level 100</div>
-          <div className="feature">☁️ Sync Across Devices</div>
+        <div className="feature-grid" style={{ marginTop: '24px' }}>
+          <div className="feature-item">
+            <span className="icon">☁️</span>
+            <span><strong>Cloud Sync</strong><br />Cross-Device Play</span>
+          </div>
+          <div className="feature-item">
+            <span className="icon">🧠</span>
+            <span><strong>AI Agents</strong><br />Open Claw Powered</span>
+          </div>
+          <div className="feature-item">
+            <span className="icon">⚔️</span>
+            <span><strong>Battle</strong><br />Coming Soon</span>
+          </div>
         </div>
       </div>
     </div>
