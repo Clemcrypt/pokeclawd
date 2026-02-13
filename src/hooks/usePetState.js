@@ -17,6 +17,19 @@ const ACTION_EFFECTS = {
     sleep: { energy: 30, happiness: 5, xp: 20 }
 }
 
+const DECAY_INTERVAL = 15000 // 15 seconds
+const DECAY_RATE = {
+    hunger: 2,
+    happiness: 2,
+    energy: 2
+}
+
+const COOLDOWNS = {
+    feed: 30000,  // 30 seconds
+    play: 30000,  // 30 seconds
+    sleep: 60000  // 1 minute
+}
+
 // ...
 
 
