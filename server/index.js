@@ -23,6 +23,8 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/scores', scoresRouter)
+import petRouter from './routes/pet.js'
+app.use('/api/pet', petRouter)
 
 // Connect to MongoDB and start server
 async function start() {

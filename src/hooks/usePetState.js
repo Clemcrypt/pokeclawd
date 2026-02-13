@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { saveScore } from '../api/client'
+import { saveScore, getActivePet, syncActivePet } from '../api/client'
 
 const INITIAL_STATS = {
     hunger: 80,
@@ -67,6 +67,7 @@ const writeStorage = (walletAddress, key, value) => {
 export function usePetState(walletAddress = null, petType = null) {
     // Track the previous wallet to detect changes
     const prevWalletRef = useRef(walletAddress)
+    const isLoadedRef = useRef(false) // Block sync until remote check completes
 
     const [stats, setStats] = useState(INITIAL_STATS)
     const [isAlive, setIsAlive] = useState(true)
@@ -286,6 +287,87 @@ export function usePetState(walletAddress = null, petType = null) {
         setIsAlive(true)
         setMessage('🐣 New pet!')
     }, [])
+
+    // Load active pet from Cloud (Cloud Sync)
+    useEffect(() => {
+        if (!walletAddress) return
+
+        let cancelled = false
+        const fetchRemote = async () => {
+            // Reset loaded state on wallet change
+            if (walletAddress !== prevWalletRef.current) isLoadedRef.current = false
+
+            const remotePet = await getActivePet(walletAddress)
+            if (cancelled) return
+
+            if (remotePet) {
+                // Check if remote is newer than local (using "lastUpdated" from remote vs local "lastUpdate")
+                const localScore = readStorage(walletAddress, 'score', { lastUpdate: 0 })
+
+                // If remote is newer (or similar), use remote
+                // (We prioritize remote to ensure cross-device consistency)
+                if (remotePet.score && (!localScore.lastUpdate || remotePet.score.lastUpdate >= localScore.lastUpdate)) {
+                    console.log('☁️ Syncing from Cloud...')
+
+                    // Calculate decay on REMOTE state
+                    const timePassed = Date.now() - remotePet.score.lastUpdate
+                    const decayIntervals = Math.floor(timePassed / DECAY_INTERVAL)
+
+                    if (decayIntervals > 0) {
+                        const decayedStats = {
+                            hunger: Math.max(0, remotePet.stats.hunger - (DECAY_RATE.hunger * decayIntervals)),
+                            happiness: Math.max(0, remotePet.stats.happiness - (DECAY_RATE.happiness * decayIntervals)),
+                            energy: Math.max(0, remotePet.stats.energy - (DECAY_RATE.energy * decayIntervals)),
+                            xp: remotePet.stats.xp || 0
+                        }
+
+                        // Check death (logic simplified for syncing - main death loop handles the rest)
+                        setStats(decayedStats)
+
+                        // If died, isAlive will be handled by the main death check effect
+                        // But we should set isAlive from remote initially
+                        setIsAlive(remotePet.isAlive)
+
+                        setScore({
+                            ...remotePet.score,
+                            startTime: remotePet.score.startTime,
+                            actionsCompleted: remotePet.score.actionsCompleted,
+                            lastUpdate: Date.now() // We just calculated decay up to now
+                        })
+                    } else {
+                        setStats(remotePet.stats)
+                        setIsAlive(remotePet.isAlive)
+                        setScore({ ...remotePet.score, lastUpdate: Date.now() })
+                    }
+
+                    setCooldowns(remotePet.cooldowns || { feed: 0, play: 0, sleep: 0 })
+                    // Note: petType is handled by App.jsx usually, but we could sync it here too
+                }
+            }
+            isLoadedRef.current = true
+        }
+
+        fetchRemote()
+        return () => { cancelled = true }
+    }, [walletAddress])
+
+    // Sync state to Cloud
+    useEffect(() => {
+        if (!walletAddress || !isLoadedRef.current) return
+
+        const sync = setTimeout(() => {
+            syncActivePet({
+                walletAddress,
+                stats,
+                score,
+                cooldowns,
+                petType: petType?.id || 'pikaclaw',
+                isAlive
+            }).catch(console.error)
+        }, 2000) // Debounce 2s
+
+        return () => clearTimeout(sync)
+    }, [stats, score, cooldowns, isAlive, walletAddress, petType])
 
     // Decay stats over time (only if alive)
     useEffect(() => {

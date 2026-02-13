@@ -64,3 +64,47 @@ export async function getLeaderboard(limit = 10) {
         return []
     }
 }
+/**
+ * Get active pet state for a wallet
+ */
+export async function getActivePet(walletAddress) {
+    try {
+        const response = await fetch(`${API_URL}/api/pet/${walletAddress}`)
+
+        if (response.status === 404) return null
+        if (!response.ok) throw new Error('Failed to fetch active pet')
+
+        return await response.json()
+    } catch (error) {
+        console.error('API Error (getActivePet):', error)
+        return null
+    }
+}
+
+/**
+ * Sync active pet state to the API
+ */
+export async function syncActivePet({ walletAddress, stats, score, cooldowns, petType, isAlive }) {
+    try {
+        const response = await fetch(`${API_URL}/api/pet/${walletAddress}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                walletAddress,
+                stats,
+                score,
+                cooldowns,
+                petType,
+                isAlive,
+                lastUpdate: Date.now()
+            })
+        })
+
+        if (!response.ok) throw new Error('Failed to sync active pet')
+
+        return await response.json()
+    } catch (error) {
+        console.error('API Error (syncActivePet):', error)
+        return null
+    }
+}
