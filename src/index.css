@@ -1325,3 +1325,39 @@ body::before {
     transform: translateY(-10px);
   }
 }
+
+/* Banner & Bullish Text */
+.banner-img {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-glow);
+  border: 2px solid var(--accent-primary);
+  transition: transform 0.3s ease;
+}
+
+.banner-img:hover {
+  transform: scale(1.02);
+}
+
+.bullish-text {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.9rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #ffd700, #2ecc71, #ffd700);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shine 3s linear infinite;
+  margin-bottom: 12px;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}

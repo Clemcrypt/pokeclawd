@@ -59,7 +59,9 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
           </div>
         ) : (
           <div className="new-user">
-            <p>Your wallet is connected! Choose your PokeClawd:</p>
+            <img src="/banner.png" alt="PokeClawd Banner" className="banner-img" onError={(e) => e.target.style.display = 'none'} />
+            <p className="bullish-text">🚀 MINT YOUR COMPANION</p>
+            <p>Your wallet is connected! The future of on-chain gaming starts here.</p>
           </div>
         )}
 
@@ -117,8 +119,9 @@ function ConnectWalletScreen() {
   return (
     <div className="connect-screen">
       <div className="connect-card glass-card">
+        <img src="/banner.png" alt="PokeClawd Banner" className="banner-img" onError={(e) => e.target.style.display = 'none'} />
         <h1 className="connect-title">⚡ PokeClawd</h1>
-        <p className="connect-subtitle">Open Claw Powered Pets</p>
+        <p className="connect-subtitle">Can you survive the volatility?</p>
 
         <div className="connect-pet-showcase">
           {PET_LIST.slice(0, 2).map(pet => (
@@ -129,14 +132,14 @@ function ConnectWalletScreen() {
           ))}
         </div>
 
-        <p className="connect-info">Connect your wallet to choose your companion!</p>
+        <p className="connect-info">Connect your wallet to start the revolution!</p>
 
         <WalletButton />
 
         <div className="connect-features">
-          <div className="feature">⚡ Raise your own PokeClawd</div>
-          <div className="feature">🏆 Compete on leaderboards</div>
-          <div className="feature">💾 Progress saved to your wallet</div>
+          <div className="feature">💎 Collect Rare Pets</div>
+          <div className="feature">🚀 Raise to Level 100</div>
+          <div className="feature">☁️ Sync Across Devices</div>
         </div>
       </div>
     </div>
