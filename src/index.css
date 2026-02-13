@@ -1329,8 +1329,9 @@ body::before {
 /* Banner & Bullish Text */
 .banner-img {
   width: 100%;
-  max-width: 480px;
-  height: auto;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+  object-position: center;
   border-radius: var(--border-radius-md);
   margin-bottom: 24px;
   box-shadow: var(--shadow-glow);
