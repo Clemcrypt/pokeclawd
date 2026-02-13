@@ -52,37 +52,37 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
       <div className="claim-card glass-card">
         <h2>🐣 Welcome to PokeClawd!</h2>
 
+        <div className="new-user-landing">
+          <img src="/banner.jpg" alt="PokeClawd Banner" className="banner-img" onError={(e) => e.target.style.display = 'none'} />
+
+          <div className="project-info glass-card">
+            <h3>🚀 Welcome to the Revolution</h3>
+            <p>PokeClawd is the first fully autonomous, Open Claw powered virtual pet on Solana.</p>
+
+            <div className="feature-grid">
+              <div className="feature-item">
+                <span className="icon">☁️</span>
+                <span><strong>Cloud Sync</strong><br />Play on any device</span>
+              </div>
+              <div className="feature-item">
+                <span className="icon">💀</span>
+                <span><strong>Perma-Death</strong><br />High stakes, high rewards</span>
+              </div>
+              <div className="feature-item">
+                <span className="icon">🧬</span>
+                <span><strong>Evolve</strong><br />Level 1 to 100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {walletStats && walletStats.totalPets > 0 ? (
-          <div className="returning-user">
-            <p>Welcome back! You've raised <strong>{walletStats.totalPets}</strong> pets.</p>
+          <div className="returning-user glass-card" style={{ marginBottom: '24px', padding: '16px', background: 'rgba(255, 107, 53, 0.1)', border: '1px solid var(--accent-primary)' }}>
+            <p>👋 Welcome back! You've raised <strong>{walletStats.totalPets}</strong> pets.</p>
             <p>Your best score: <strong>{walletStats.highScore?.toLocaleString() || 0}</strong></p>
           </div>
         ) : (
-          <div className="new-user-landing">
-            <img src="/banner.jpg" alt="PokeClawd Banner" className="banner-img" onError={(e) => e.target.style.display = 'none'} />
-
-            <div className="project-info glass-card">
-              <h3>🚀 Welcome to the Revolution</h3>
-              <p>PokeClawd is the first fully autonomous, Open Claw powered virtual pet on Solana.</p>
-
-              <div className="feature-grid">
-                <div className="feature-item">
-                  <span className="icon">☁️</span>
-                  <span><strong>Cloud Sync</strong><br />Play on any device</span>
-                </div>
-                <div className="feature-item">
-                  <span className="icon">💀</span>
-                  <span><strong>Perma-Death</strong><br />High stakes, high rewards</span>
-                </div>
-                <div className="feature-item">
-                  <span className="icon">🧬</span>
-                  <span><strong>Evolve</strong><br />Level 1 to 100</span>
-                </div>
-              </div>
-            </div>
-
-            <p className="bullish-text">MINT YOUR COMPANION BELOW 👇</p>
-          </div>
+          <p className="bullish-text" style={{ marginBottom: '24px' }}>MINT YOUR COMPANION BELOW 👇</p>
         )}
 
         <div className="pet-selector">
