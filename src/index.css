@@ -1435,3 +1435,78 @@ body::before {
     padding: 12px;
   }
 }
+
+/* Level Visibility Enhancements */
+.pet-container {
+  position: relative;
+}
+
+.pet-level-floating-badge {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-primary);
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--border-radius-sm);
+  padding: 4px 10px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  color: var(--accent-primary);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+  z-index: 10;
+  white-space: nowrap;
+  animation: float 4s ease-in-out infinite;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.level-badge-premium {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+  border: 2px solid #ffd700;
+  border-radius: var(--border-radius-md);
+  padding: 8px 12px;
+  min-width: 60px;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.lvl-text {
+  font-size: 0.6rem;
+  color: #ffd700;
+  font-family: 'Press Start 2P', cursive;
+  opacity: 0.8;
+}
+
+.lvl-number {
+  font-size: 1.5rem;
+  font-family: 'Press Start 2P', cursive;
+  color: #fff !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  line-height: 1;
+  margin-top: 4px;
+}
+
+.xp-section {
+  flex: 1;
+}
+
+.xp-bar {
+  height: 10px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.xp-fill {
+  background: linear-gradient(90deg, #9b59b6, #3498db) !important;
+  box-shadow: 0 0 10px rgba(155, 89, 182, 0.5);
+}

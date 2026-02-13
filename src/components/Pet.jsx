@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-export function Pet({ action, message, mood, isAlive = true, petType }) {
+export function Pet({ action, message, mood, isAlive = true, petType, level }) {
     const sprites = petType?.sprites
 
     const currentImage = useMemo(() => {
@@ -16,6 +16,11 @@ export function Pet({ action, message, mood, isAlive = true, petType }) {
 
     return (
         <div className="pet-container">
+            {isAlive && level && (
+                <div className="pet-level-floating-badge">
+                    LVL {level}
+                </div>
+            )}
             {message && (
                 <div className="pet-message">{message}</div>
             )}

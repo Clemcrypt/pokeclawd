@@ -293,7 +293,7 @@ function App() {
 
         <div className="game-container">
           <ScoreDisplay score={score} />
-          <Pet action={action} message={message} mood={mood} isAlive={isAlive} petType={selectedPetType} />
+          <Pet action={action} message={message} mood={mood} isAlive={isAlive} petType={selectedPetType} level={level} />
           <PetStats stats={stats} level={level} xpProgress={xpProgress} />
           <ActionButtons
             onFeed={feed}

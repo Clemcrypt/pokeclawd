@@ -5,19 +5,17 @@ export function PetStats({ stats, level, xpProgress }) {
 
     return (
         <div className="stats-container glass-card">
-            <div className="level-container" style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div className="level-badge" style={{ fontFamily: '"Press Start 2P"', color: '#ffd700', fontSize: '0.8rem' }}>
-                    LVL {level}
+            <div className="status-header">
+                <div className="level-badge-premium">
+                    <span className="lvl-text">LVL</span>
+                    <span className="lvl-number">{level}</span>
                 </div>
-                <div className="xp-container" style={{ flex: 1, marginLeft: '12px' }}>
-                    <div className="stat-label" style={{ textAlign: 'right', fontSize: '0.6rem' }}>XP {xpProgress}/100</div>
-                    <div className="stat-bar" style={{ height: '8px' }}>
+                <div className="xp-section">
+                    <div className="stat-label">XP {xpProgress}/100</div>
+                    <div className="stat-bar xp-bar">
                         <div
-                            className="stat-fill"
-                            style={{
-                                width: `${xpProgress}%`,
-                                background: 'linear-gradient(90deg, #9b59b6, #3498db)'
-                            }}
+                            className="stat-fill xp-fill"
+                            style={{ width: `${xpProgress}%` }}
                         />
                     </div>
                 </div>
