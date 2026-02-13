@@ -192,12 +192,12 @@ export function usePetState(walletAddress = null, petType = null) {
         prevWalletRef.current = walletAddress
     }, [walletAddress, petType]) // Add petType dependency
 
-    // ... (localStorage writes)
-    useEffect(() => { writeStorage(walletAddress, 'stats', stats) }, [walletAddress, stats])
-    useEffect(() => { writeStorage(walletAddress, 'alive', isAlive) }, [walletAddress, isAlive])
-    useEffect(() => { writeStorage(walletAddress, 'score', score) }, [walletAddress, score])
-    useEffect(() => { writeStorage(walletAddress, 'highscores', highScores) }, [walletAddress, highScores])
-    useEffect(() => { writeStorage(walletAddress, 'cooldowns', cooldowns) }, [walletAddress, cooldowns])
+    // ... (localStorage writes) - Only write if pet is claimed (petType exists)
+    useEffect(() => { if (petType) writeStorage(walletAddress, 'stats', stats) }, [walletAddress, stats, petType])
+    useEffect(() => { if (petType) writeStorage(walletAddress, 'alive', isAlive) }, [walletAddress, isAlive, petType])
+    useEffect(() => { if (petType) writeStorage(walletAddress, 'score', score) }, [walletAddress, score, petType])
+    useEffect(() => { if (petType) writeStorage(walletAddress, 'highscores', highScores) }, [walletAddress, highScores, petType])
+    useEffect(() => { if (petType) writeStorage(walletAddress, 'cooldowns', cooldowns) }, [walletAddress, cooldowns, petType])
 
     // Check for death condition
     useEffect(() => {
@@ -353,7 +353,7 @@ export function usePetState(walletAddress = null, petType = null) {
 
     // Sync state to Cloud
     useEffect(() => {
-        if (!walletAddress || !isLoadedRef.current) return
+        if (!walletAddress || !isLoadedRef.current || !petType) return
 
         const sync = setTimeout(() => {
             syncActivePet({
