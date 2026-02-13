@@ -1,5 +1,7 @@
 # ⚡ PokeClawd
 
+![PokeClawd Banner](https://raw.githubusercontent.com/Clemcrypt/pokeclawd/main/banner.png)
+
 **Open Claw Powered Pets** — A virtual pet game with Solana wallet integration.
 
 ![PokeClawd Screenshot](screenshot.png)
