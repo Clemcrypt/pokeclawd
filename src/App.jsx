@@ -58,10 +58,30 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
             <p>Your best score: <strong>{walletStats.highScore?.toLocaleString() || 0}</strong></p>
           </div>
         ) : (
-          <div className="new-user">
+          <div className="new-user-landing">
             <img src="/banner.png" alt="PokeClawd Banner" className="banner-img" onError={(e) => e.target.style.display = 'none'} />
-            <p className="bullish-text">🚀 MINT YOUR COMPANION</p>
-            <p>Your wallet is connected! The future of on-chain gaming starts here.</p>
+
+            <div className="project-info glass-card">
+              <h3>🚀 Welcome to the Revolution</h3>
+              <p>PokeClawd is the first fully autonomous, Open Claw powered virtual pet on Solana.</p>
+
+              <div className="feature-grid">
+                <div className="feature-item">
+                  <span className="icon">☁️</span>
+                  <span><strong>Cloud Sync</strong><br />Play on any device</span>
+                </div>
+                <div className="feature-item">
+                  <span className="icon">💀</span>
+                  <span><strong>Perma-Death</strong><br />High stakes, high rewards</span>
+                </div>
+                <div className="feature-item">
+                  <span className="icon">🧬</span>
+                  <span><strong>Evolve</strong><br />Level 1 to 100</span>
+                </div>
+              </div>
+            </div>
+
+            <p className="bullish-text">MINT YOUR COMPANION BELOW 👇</p>
           </div>
         )}
 
