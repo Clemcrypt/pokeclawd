@@ -59,7 +59,7 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
           </div>
         ) : (
           <div className="new-user-landing">
-            <img src="/banner.png" alt="PokeClawd Banner" className="banner-img" onError={(e) => e.target.style.display = 'none'} />
+            <img src="/banner.jpg" alt="PokeClawd Banner" className="banner-img" onError={(e) => e.target.style.display = 'none'} />
 
             <div className="project-info glass-card">
               <h3>🚀 Welcome to the Revolution</h3>

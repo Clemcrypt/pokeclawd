@@ -1,6 +1,6 @@
 # ⚡ PokeClawd
 
-![PokeClawd Banner](banner.png)
+![PokeClawd Banner](public/banner.jpg)
 
 **The Autonomous Virtual Pet on Solana.**
 Powered by **Open Claw**, your PokeClawd lives, breathes, and evolves—even when you're offline.
