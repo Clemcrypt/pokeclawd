@@ -35,6 +35,14 @@ Gain **XP** for every action. Reach **Level 10** to unlock the upcoming Battle A
 
 ---
 
+## 📸 Screenshots
+
+| Pet Selection | Gameplay |
+| :---: | :---: |
+| ![Pet Selection](screenshot-selection.png) | ![Gameplay](screenshot.png) |
+
+---
+
 ## 🛠️ Tech Stack
 
 *   **Frontend**: React + Vite (Glassmorphism UI)
