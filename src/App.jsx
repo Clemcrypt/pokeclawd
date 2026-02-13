@@ -59,20 +59,7 @@ function ClaimPetScreen({ onClaim, walletStats, petHistory }) {
             <h3>🚀 Welcome to the Revolution</h3>
             <p>PokeClawd is the first fully autonomous, Open Claw powered virtual pet on Solana.</p>
 
-            <div className="feature-grid">
-              <div className="feature-item">
-                <span className="icon">☁️</span>
-                <span><strong>Cloud Sync</strong><br />Play on any device</span>
-              </div>
-              <div className="feature-item">
-                <span className="icon">💀</span>
-                <span><strong>Perma-Death</strong><br />High stakes, high rewards</span>
-              </div>
-              <div className="feature-item">
-                <span className="icon">🧬</span>
-                <span><strong>Evolve</strong><br />Level 1 to 100</span>
-              </div>
-            </div>
+
           </div>
         </div>
 
@@ -167,20 +154,7 @@ function ConnectWalletScreen() {
 
         <WalletButton />
 
-        <div className="feature-grid" style={{ marginTop: '24px' }}>
-          <div className="feature-item">
-            <span className="icon">☁️</span>
-            <span><strong>Cloud Sync</strong><br />Cross-Device Play</span>
-          </div>
-          <div className="feature-item">
-            <span className="icon">🧠</span>
-            <span><strong>AI Agents</strong><br />Open Claw Powered</span>
-          </div>
-          <div className="feature-item">
-            <span className="icon">⚔️</span>
-            <span><strong>Battle</strong><br />Coming Soon</span>
-          </div>
-        </div>
+
       </div>
     </div>
   )
